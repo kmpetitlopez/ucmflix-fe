@@ -21,7 +21,7 @@
                 <div v-if="!content.hover">
                     <div
                         class="Img--test"
-                        :style="`background-image: url(${content.imageUrl}), url(${content.defaultImage});`"
+                        :style="`background-image: url(${content.imageUrl});`"
                     ></div>
                 </div>
                 <div class="Info--text" v-if="content.hover">

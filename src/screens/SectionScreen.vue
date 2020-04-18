@@ -10,7 +10,7 @@
                         class="Movies"
                         v-for="(content, i) in contents"
                         :key="i"
-                        :style="{backgroundImage : content.hover ? '' : `url('${content.imageUrl}'), url('${content.defaultImage}')`  }"
+                        :style="{backgroundImage : content.hover ? '' : `url('${content.imageUrl}')`  }"
                         @click="handleClickOnImage(content)"
                         v-on:mouseover="onHoverEnter(content)"
                         v-on:mouseleave="onHoverLeave(content)"

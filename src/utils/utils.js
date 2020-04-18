@@ -1,21 +1,32 @@
 import api from './api'
+import axios from 'axios'
 
 export default {
-    getImageUrl(id){
-        return 'http://localhost:3000/static/images/' + id + '.jpg';
+    isRemoteImage(uri = '') {
+        const HTTP_REGEX = /^(https|http)?:\/\//;
+
+        return HTTP_REGEX.test(uri.trim());
+    },
+
+    getImageUrl(image){
+        let imageUrl = (image && image.uri) ? image.uri : '/static/images/default.jpg';
+        
+        imageUrl = !this.isRemoteImage(imageUrl) ? axios.defaults.baseURL + imageUrl : imageUrl;
+        return imageUrl;
     },
 
     getVideoUrl(){
         return 'http://localhost:3000/static/videos/1/manifest.mpd';
     },
 
-    completeContentInfo(contents = []){
-        return contents.map((content) => {
-            content.imageUrl = this.getImageUrl(content.id);
-            content.defaultImage = 'http://localhost:3000/static/images/default.jpg'
+    async completeContentInfo(contents = []){
+        for(const content of contents) {
+            content.image = await api.getContentImage(content.id);
+            content.imageUrl = this.getImageUrl(content.image);
             content.hover = false;
-            return content;
-        });
+        }
+
+        return contents;
     },
 
     cleanCategories(categories = []){
@@ -26,17 +37,17 @@ export default {
 
     async getHomeScreenInfo() {
         const categories = (await api.getCategories(
-            [{activeCategories: true}]
+            {activeCategories: true}
         )).items;
 
         for (const category of categories) {
             const categoryReferences = (await api.getCategoryContents(
                     category.id,
-                    [{activeContents: true}]
+                    {activeContents: true}
                 )).items,
                 contents = categoryReferences.map((categoryReference) => categoryReference.content);
 
-            category.contents = this.completeContentInfo(contents);
+            category.contents = await this.completeContentInfo(contents);
         }
 
         return this.cleanCategories(categories);
@@ -44,9 +55,9 @@ export default {
 
     async getHomeScreenNews() {
         const contents = (await api.getContents(
-                [{activeContents: true}, {limit: 7}, {newContent: true}]
+                {activeContents: true, limit: 7, newContent: true}
             )).items,
-            contentWithImages = this.completeContentInfo(contents);
+            contentWithImages = await this.completeContentInfo(contents);
 
         return contentWithImages;
     },
@@ -55,24 +66,25 @@ export default {
         const category = await api.getCategory(id),
             categoryReferences = (await api.getCategoryContents(
                 id,
-                [{activeContents: true}]
+                {activeContents: true}
             )).items,
             contents = categoryReferences.map((categoryReference) => categoryReference.content);
 
-        category.contents = this.completeContentInfo(contents);
+        category.contents = await this.completeContentInfo(contents);
 
         return category;
     },
 
     async getDetailScreenInfo(id) {
         const content = await api.getContent(id);
-        content.imageUrl = this.getImageUrl(id);
+        content.image = await api.getContentImage(content.id);
+        content.imageUrl = this.getImageUrl(content.image);
         content.videoUrl = this.getVideoUrl();
         return content;
     },
 
     async searchContent(title) {
-        const contents = (await api.getContents([{title}])).items;
+        const contents = (await api.getContents({title})).items;
 
         return contents;
     },
@@ -94,7 +106,7 @@ export default {
     },
 
     async getSeasonEpisodes(id, seasonNumber) {
-        const args = [{activeContents: true}, {seasonNumber}],
+        const args = {activeContents: true, seasonNumber},
             contents = (await api.getContentEpisodes(id, args)).items;
 
         return this.completeContentInfo(contents);

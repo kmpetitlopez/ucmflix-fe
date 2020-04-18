@@ -2,30 +2,8 @@ import axios from 'axios'
 
 export default {
 
-  buildQuery(args) {
-    let query = '?',
-      tmp = [];
-
-    for (const arg of args) {
-        for (const property in arg) {
-          const value = property + '=' + arg[property];
-          tmp.push(value);
-        }
-    }
-
-    query += tmp.join('&');
-
-    return query;
-  },
-
-  getContents (args) {
-    let query = '';
-
-    if (args && args.length) {
-      query = this.buildQuery(args);
-    }
-
-    return axios.get('/contents' + query)
+  getContents (params) {
+    return axios.get('/contents', {params})
       .then(response => {
         return response.data  && response.data.response
       })
@@ -45,14 +23,8 @@ export default {
       })
   },
 
-  getContentEpisodes (id, args) {
-    let query = '';
-
-    if (args && args.length) {
-      query = this.buildQuery(args);
-    }
-
-    return axios.get('/contents/' + id + '/episodes' + query)
+  getContentEpisodes (id, params) {
+    return axios.get('/contents/' + id + '/episodes', {params})
       .then(response => {
         return response.data  && response.data.response
       })
@@ -65,14 +37,8 @@ export default {
       })
   },
 
-  getCategories (args) {
-    let query = '';
-
-    if (args && args.length) {
-      query = this.buildQuery(args);
-    }
-
-    return axios.get('/categories' + query)
+  getCategories (params) {
+    return axios.get('/categories', {params})
       .then(response => {
         return response.data  && response.data.response
       })
@@ -85,16 +51,17 @@ export default {
       })
   },
 
-  getCategoryContents (id, args) {
-    let query = '';
-
-    if (args && args.length) {
-      query = this.buildQuery(args);
-    }
-
-    return axios.get('/categories/' + id + '/contents' + query)
+  getCategoryContents (id, params) {
+    return axios.get('/categories/' + id + '/contents', {params})
       .then(response => {
         return response.data  && response.data.response
       })
-  }
+  },
+
+  getContentImage (id) {
+    return axios.get('/contents/' + id + '/image')
+      .then(response => {
+        return response.data  && response.data.response
+      })
+  },
 }
