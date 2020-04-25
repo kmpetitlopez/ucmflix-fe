@@ -94,7 +94,7 @@ export default {
                 h2 {
                     color: $gray-02;
                     font-weight:bold;
-                    padding: 5px 10px 0px 10px;
+                    padding: 2px 10px 0px 10px;
                 }
                 h4 {
                     color: $gray-02;
@@ -108,12 +108,14 @@ export default {
                     text-align: left;
                     max-height: 70px;
                     line-height: 15px;
+                    font-size: 14px;
                 }
                 footer {
                     color: $gray-04;
                     font-weight:bold;
-                    bottom: 10px;
+                    bottom: 5px;
                     position: absolute;
+                    font-size: 15px;
                     span{
                         padding: 10px;
                     }
