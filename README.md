@@ -1,27 +1,26 @@
 # ucmflix
 
+## Getting started
+
+- Install **NodeJS** if you haven't installed yet (V10.16.0)  [Download here](https://nodejs.org/es/download/)
+
 ## Project setup
 ```
 npm ci
 ```
-```
-yarn install
-```
 
 ### Compiles and hot-reloads for development
 ```
-yarn serve
+npm run serve
 ```
 
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## Dependencies
+ 
+- [axios](https://github.com/axios/axios)
+- [lodash](https://github.com/lodash/lodash)
+- [shaka-player](https://github.com/google/shaka-player)
+- [vue](https://github.com/vuejs/vue)
+- [vue-router](https://github.com/vuejs/vue-router)
+- [vue-types](https://github.com/dwightjack/vue-types)
+- [vueperslides](https://github.com/antoniandre/vueper-slides)
+- [webpack](https://github.com/webpack/webpack)
