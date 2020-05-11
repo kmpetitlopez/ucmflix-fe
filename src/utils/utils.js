@@ -1,5 +1,6 @@
 import api from './api'
 import axios from 'axios'
+import url from 'url'
 
 export default {
     isRemoteImage(uri = '') {
@@ -10,13 +11,13 @@ export default {
 
     getImageUrl(image){
         let imageUrl = (image && image.uri) ? image.uri : '/static/images/default.jpg';
-        
-        imageUrl = !this.isRemoteImage(imageUrl) ? axios.defaults.baseURL + imageUrl : imageUrl;
+
+        imageUrl = !this.isRemoteImage(imageUrl) ? url.resolve(axios.defaults.baseURL, imageUrl) : imageUrl;
         return imageUrl;
     },
 
-    getVideoUrl(){
-        return 'http://localhost:3000/static/videos/1/manifest.mpd';
+    getVideoUrl(asset){
+        return url.resolve(axios.defaults.baseURL, asset);
     },
 
     async completeContentInfo(contents = []){
@@ -79,7 +80,7 @@ export default {
         const content = await api.getContent(id);
         content.image = await api.getContentImage(content.id);
         content.imageUrl = this.getImageUrl(content.image);
-        content.videoUrl = this.getVideoUrl();
+        content.videoUrl = this.getVideoUrl(content.asset);
         return content;
     },
 
