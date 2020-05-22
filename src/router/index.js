@@ -1,6 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import { MainScreen, NotFoundScreen, HomePageScreen, SectionScreen, DetailScreen, MasterScreen } from '@/screens'
+import { MainScreen, NotFoundScreen, 
+    HomePageScreen, SectionScreen, 
+    DetailScreen, MasterScreen, 
+    LoginScreen, SignUpScreen, RecoveryPasswordScreen,
+    PasswordScreen } from '@/screens'
 
 Vue.use(Router)
 
@@ -17,6 +21,26 @@ const router = new Router({
                     component: HomePageScreen,
                 },
             ],
+        },
+        {
+            path: '/login',
+            name: 'login',
+            component: LoginScreen,
+        },
+        {
+            path: '/sign-up',
+            name: 'sign-up',
+            component: SignUpScreen,
+        },
+        {
+            path: '/password-confirmation',
+            name: 'password-confirmation',
+            component: PasswordScreen,
+        },
+        {
+            path: '/recovery-password',
+            name: 'recovery-password',
+            component: RecoveryPasswordScreen,
         },
         {
             path: '*',

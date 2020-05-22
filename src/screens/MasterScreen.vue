@@ -44,13 +44,14 @@ export default {
         },
         onHoverLeave(content) {
             content.hover = false;
-        },
-        prueba(a) {
-            console.log(a);
         }
     },
     mounted() {
-        this.fetchResult();
+         if (!this.$store.getters.isLoggedIn) {
+            this.$router.push('/login');
+        } else {
+            this.fetchResult()
+        }
     },
     computed: {
         sectionID() {

@@ -9,7 +9,7 @@
                     <h2>{{ title }}</h2>
                 </div>
             </div>
-            <div class="Search">
+            <div class="Search" v-if="!isLogin">
                 <Input
                     v-model="value"
                     name="search"
@@ -18,6 +18,8 @@
                     iconLeft="search"
                     :width="350"
                 />
+                <Icon icon="star" :size="20" class="Buttons" />
+                <Icon icon="logout" :size="20" class="Buttons" @click="logout"/>
             </div>
         </div>
     </div>
@@ -25,21 +27,31 @@
 
 <script>
 import VueTypes from 'vue-types'
-import {Input} from '@/components';
+import {Input, Icon} from '@/components';
+import api from '@/utils/api';
 
 export default {
     name: 'Header',
     props: {
-        title: VueTypes.string.def('')
+        title: VueTypes.string.def(''),
+        isLogin: VueTypes.bool.def(false)
     },
     components: {
-        Input
+        Input,
+        Icon
     },
     data() {
         return {
             value: undefined
         };
     },
+    methods: {
+        async logout() {
+            await api.logout();
+            this.$store.dispatch('logout');
+            this.$router.push('/login');
+        }
+    }
 }
 </script>
 
@@ -60,8 +72,8 @@ export default {
         padding: 20px 60px;
         .Flex {
             display: flex;
-
             .Logo {
+                cursor: pointer;
                 h1 {
                     color: $primary;
                     font-size: 50px;
@@ -87,6 +99,13 @@ export default {
                     margin: 0;
                 }
             }
+        }
+        .Search {
+            display: flex;
+        }
+        .Buttons{
+            padding: 7px 10px;
+            cursor: pointer;
         }
     }
 }

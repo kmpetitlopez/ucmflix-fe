@@ -64,4 +64,27 @@ export default {
         return response.data  && response.data.response
       })
   },
+
+  login (username, password) {
+    return axios.post('/auth/login', {
+        username,
+        password
+      })
+  },
+
+  logout () {
+    return axios.get('/auth/logout')
+  },
+
+  singUp (body) {
+    return axios.post('/auth/sign-up', body)
+  },
+
+  recoverPassword (body) {
+    return axios.post('/auth/request-password-recovery', body)
+  },
+
+  sendPassword (body) {
+    return axios.post('/auth/confirm-password', body)
+  }
 }

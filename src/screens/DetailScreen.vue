@@ -34,7 +34,11 @@ export default {
         }
     },
     async mounted () {
-        await this.fetchResult()
+         if (!this.$store.getters.isLoggedIn) {
+            this.$router.push('/login');
+        } else {
+            await this.fetchResult()
+        }
     },
 }
 </script>

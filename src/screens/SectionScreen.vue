@@ -69,7 +69,11 @@ export default {
         }
     },
     mounted () {
-        this.fetchResult()
+        if (!this.$store.getters.isLoggedIn) {
+            this.$router.push('/login');
+        } else {
+            this.fetchResult()
+        }
     },
     computed: {
         sectionID() {
