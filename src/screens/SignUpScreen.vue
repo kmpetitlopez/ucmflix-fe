@@ -46,6 +46,7 @@
 import { Icon, Header} from '@/components'
 import api from '@/utils/api';
 import authUtils from '@/utils/authUtils';
+import constants from '@/utils/constants';
 
 export default {
     name: 'LoginScreen',
@@ -78,8 +79,21 @@ export default {
             this.isLoading = true;
 
             if (isValid) {
-               await api.singUp(this.data);
-               this.emailSent = true;
+                try {
+                    await api.singUp(this.data);
+                    this.emailSent = true;
+                } catch (err) {
+                    if (err && err.response
+                        && err.response.data &&
+                        err.response.data === constants.BE_ERRORS.USER_ALREADY_EXIST) {
+                            this.error.username = 'El usuario o email ya existe.';
+                            this.isInvalid.username = true;
+                    } else {
+                        this.error.username = 'Error creando usuario.';
+                        this.isInvalid.username = true;
+                    }
+                }
+               
             }
 
             this.isLoading = false;
