@@ -4,9 +4,11 @@ import router from '@/router'
 import store from '@/store'
 import VueCookies from "vue-cookies"
 import Toasted from 'vue-toasted';
+import Carousel3d from 'vue-carousel-3d';
 
 Vue.use(VueCookies)
 Vue.use(Toasted)
+Vue.use(Carousel3d)
 
 Vue.directive('click-outside', {
     bind: function (el, binding, vnode) {

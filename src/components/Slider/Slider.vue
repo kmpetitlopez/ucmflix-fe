@@ -1,55 +1,58 @@
 <template>
-    <vueper-slides
+    <Carousel3d
         class="SliderSectionSlides"
-        :arrowsOutside="false"
-        :bullets="false"
-        :visible-slides="5"
-        :fixed-height="true"
-        :gap="1"
-        :touchable="false"
-        slide-multiple
-        lazy
-    >
-        <vueper-slide 
-            v-for="(content, i) in contents" 
-            :key="i" :link="getPath(content)"
-            :class="{'Info': content.hover, Img: !content.hover}"
-            @mouse-enter="onHoverEnter(content)"
-            @mouse-leave="onHoverLeave(content)"
+        :disable3d="true"
+        :clickable="false"
+        :controls-visible="true"
+        :display="5"
+        :width="390"
+        :height="200"
+        :space="400"
+        :border="0"
+        :loop="false"
         >
-            <template v-slot:content="">
-                <div v-if="!content.hover">
-                    <div
-                        class="Img--test"
-                        :style="`background-image: url(${content.imageUrl});`"
-                    ></div>
-                </div>
-                <div class="Info--text" v-if="content.hover">
-                    <h2>{{ content.title }}</h2>
-                    <h4>{{ content.genre || 'Entretenimiento/Otros' }}</h4>
-                    <p>{{ content.description || '...' }}</p>
-                    <footer>
-                        <span>{{ content.year || '-' }}</span>
-                        <span>{{ content.country || '-' }}</span>
-                        <span>{{ content.duration + 'min' || '-' }}</span>
-                        <span>{{ content.parentalRating || '-' }}</span>
-                    </footer>
-                </div>
-            </template>
-        </vueper-slide>
-    </vueper-slides>
+            <slide v-for="(content, i) in contents" :index="i" :key="i" :slide-space="300">
+                <template slot-scope="" >
+                    <div @mouseover="onHoverEnter(content)"
+                        @mouseleave="onHoverLeave(content)" 
+                        :style="`height: 100%`" 
+                        :class="{'Info': content.hover, Img: !content.hover}">
+                        <div v-if="!content.hover">
+                            <img :src="`${content.imageUrl}`" >
+                        </div>
+                        <div class="Info--text" v-if="content.hover">
+                            <h2 @click="getPath(content)">{{ content.title }}</h2>
+                            <h4>{{ content.genre || 'Entretenimiento/Otros' }}</h4>
+                            <p>{{ content.description || '...' }}</p>
+                            <footer>
+                                <span>{{ content.year || '-' }}</span>
+                                <span>{{ content.country || '-' }}</span>
+                                <span>{{ content.duration + 'min' || '-' }}</span>
+                                <span>{{ content.parentalRating || '-' }}</span>
+                                <Icon icon="star" :size="20" 
+                                    @click="makeFavorite(content)"
+                                    :style="{color : content.isFavorite ? '#F6B406' : '#9191a3'}"
+                                    class="Icon"/>
+                            </footer>
+                        </div>
+                    </div>
+                </template>
+            </slide>
+    </Carousel3d>
 </template>
 
 <script>
 import VueTypes from 'vue-types'
-import { VueperSlides, VueperSlide } from 'vueperslides'
-import 'vueperslides/dist/vueperslides.css'
+import { Carousel3d, Slide } from 'vue-carousel-3d';
+import {Icon} from '@/components';
+import utils from '@/utils/utils';
 
 export default {
     name: 'Slider',
     components: {
-        VueperSlides,
-        VueperSlide
+        Icon,
+        Carousel3d,
+        Slide,
     },
     props: {
         contents: VueTypes.array.isRequired
@@ -65,8 +68,11 @@ export default {
             content.hover = false
         },
         getPath (content) {
-            const path = content.type === 'master' ? '/master/' : '/detail/';
-            return path + content.id;
+            this.$router.push({ name: 
+                content.type === 'master' ? 'master' : 'detail', params: { id: content.id } });
+        },
+        async makeFavorite (content) {
+            await utils.makeFavorite(content);
         }
     }
 }
@@ -95,6 +101,7 @@ export default {
                     color: $gray-02;
                     font-weight:bold;
                     padding: 2px 10px 0px 10px;
+                    cursor: pointer;
                 }
                 h4 {
                     color: $gray-02;
@@ -118,6 +125,9 @@ export default {
                     font-size: 15px;
                     span{
                         padding: 10px;
+                    }
+                    .Icon {
+                        cursor: pointer;
                     }
                 }
             }

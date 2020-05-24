@@ -86,5 +86,26 @@ export default {
 
   sendPassword (body) {
     return axios.post('/auth/confirm-password', body);
+  },
+
+  getFavoriteContent (params) {
+    return axios.get('/favorite-contents/', {params})
+      .then(response => {
+        return response.data  && response.data.response
+      });
+  },
+
+  makeFavoriteContent (body) {
+    return axios.post('/favorite-contents/', body)
+      .then(response => {
+        return response.data  && response.data.response
+      });
+  },
+
+  deleteFavoriteContent (params) {
+    return axios.delete('/favorite-contents/', {params})
+      .then(response => {
+        return response.data  && response.data.response
+      });
   }
 }

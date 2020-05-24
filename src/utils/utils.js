@@ -15,9 +15,12 @@ export default {
 
     async completeContentInfo(contents = []){
         for(const content of contents) {
+            const favoriteContents = await api.getFavoriteContent(
+                {contentId: content.id});
             content.image = await api.getContentImage(content.id);
             content.imageUrl = this.getImageUrl(content.image);
             content.hover = false;
+            content.isFavorite = favoriteContents && favoriteContents.count > 0;
         }
 
         return contents;
@@ -69,6 +72,13 @@ export default {
         return category;
     },
 
+    async getFavoriteContentScreenInfo() {
+        const favoriteContents = (await api.getFavoriteContent()).items,
+            contents = favoriteContents.map((favoriteContent) => favoriteContent.content);
+
+        return this.completeContentInfo(contents);
+    },
+
     async getDetailScreenInfo(id) {
         const content = await api.getContent(id);
         content.image = await api.getContentImage(content.id);
@@ -104,5 +114,17 @@ export default {
             contents = (await api.getContentEpisodes(id, args)).items;
 
         return this.completeContentInfo(contents);
+    },
+
+    async makeFavorite (content) {
+        if (content.isFavorite) {
+            await api.deleteFavoriteContent({contentId: content.id});
+        } else {
+            await api.makeFavoriteContent({contentId: content.id});
+        }
+
+        content.isFavorite = !content.isFavorite;
+
+        return content;
     }
 }

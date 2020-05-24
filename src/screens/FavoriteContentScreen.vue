@@ -1,7 +1,7 @@
 <template>
     <div class="SectionScreen">
         <div class="Wrapper">
-            <Header :title="category.name" />
+            <Header title="Contenido Favorito" />
 
             <div class="Content">
                 <!-- SECTIONS -->
@@ -51,7 +51,6 @@ export default {
         return {
             isTyping: false,
             name: undefined,
-            category: {},
             contents: []
         }
     },
@@ -61,8 +60,7 @@ export default {
             this.$router.push({ name, params: { id: param.id } })
         },
         async fetchResult () {
-            this.category = await utils.getSectionScreenInfo(this.sectionID);
-            this.contents = this.category.contents;
+            this.contents = await utils.getFavoriteContentScreenInfo();
         },
         onHoverEnter (content) {
             content.hover = true
@@ -72,6 +70,8 @@ export default {
         },
         async makeFavorite (content) {
             await utils.makeFavorite(content);
+            this.contents = this.contents.filter((content) => content.isFavorite);
+            console.log(this.contents)
         }
     },
     mounted () {
@@ -79,11 +79,6 @@ export default {
             this.$router.push('/login');
         } else {
             this.fetchResult()
-        }
-    },
-    computed: {
-        sectionID() {
-            return this.$router.history.current.params.id
         }
     }
 }

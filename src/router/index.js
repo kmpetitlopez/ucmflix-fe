@@ -4,7 +4,7 @@ import { MainScreen, NotFoundScreen,
     HomePageScreen, SectionScreen, 
     DetailScreen, MasterScreen, 
     LoginScreen, SignUpScreen, RecoveryPasswordScreen,
-    PasswordScreen } from '@/screens'
+    PasswordScreen, FavoriteContentScreen } from '@/screens'
 
 Vue.use(Router)
 
@@ -61,6 +61,11 @@ const router = new Router({
             path: '/master/:id',
             name: 'master',
             component: MasterScreen,
+        },
+        {
+            path: '/favorite-contents',
+            name: 'favoriteContents',
+            component: FavoriteContentScreen,
         }
     ],
 })

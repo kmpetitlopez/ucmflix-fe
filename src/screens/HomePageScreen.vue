@@ -71,8 +71,8 @@ export default {
             this.$router.push({ name: 'section', params: { id: param } })
         },
         async fetchResult () {
-            this.categories = await utils.getHomeScreenInfo()
             this.newContents = await utils.getHomeScreenNews()
+            this.categories = await utils.getHomeScreenInfo()
         },
         getPath (content) {
             const path = content.type === 'master' ? '/master/' : '/detail/';

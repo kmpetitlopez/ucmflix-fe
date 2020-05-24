@@ -18,7 +18,7 @@
                     iconLeft="search"
                     :width="350"
                 />
-                <Icon icon="star" :size="20" class="Buttons" />
+                <Icon icon="star" :size="20" class="Buttons" @click="$router.push('/favorite-contents')"/>
                 <Icon icon="logout" :size="20" class="Buttons" @click="logout"/>
             </div>
         </div>
