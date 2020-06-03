@@ -9,12 +9,12 @@
         :height="200"
         :space="400"
         :border="0"
-        :loop="false"
+        :loop="true"
         >
             <slide v-for="(content, i) in contents" :index="i" :key="i" :slide-space="300">
                 <template slot-scope="" >
-                    <div @mouseover="onHoverEnter(content)"
-                        @mouseleave="onHoverLeave(content)" 
+                    <div v-on:mouseover="onHoverEnter(content)"
+                        v-on:mouseleave="onHoverLeave(content)" 
                         :style="`height: 100%`" 
                         :class="{'Info': content.hover, Img: !content.hover}">
                         <div v-if="!content.hover">
@@ -32,6 +32,10 @@
                                 <Icon icon="star" :size="20" 
                                     @click="makeFavorite(content)"
                                     :style="{color : content.isFavorite ? '#F6B406' : '#9191a3'}"
+                                    class="Icon"/>
+                                <Icon v-if="content.type !== 'master'" icon="play" :size="20" 
+                                    @click="getPath(content)"
+                                    :style="{color : '#9191a3'}"
                                     class="Icon"/>
                             </footer>
                         </div>
@@ -128,6 +132,7 @@ export default {
                     }
                     .Icon {
                         cursor: pointer;
+                        padding: 10px;
                     }
                 }
             }

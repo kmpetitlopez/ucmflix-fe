@@ -71,8 +71,13 @@ export default {
             this.$router.push({ name: 'section', params: { id: param } })
         },
         async fetchResult () {
-            this.newContents = await utils.getHomeScreenNews()
-            this.categories = await utils.getHomeScreenInfo()
+            try {
+                this.newContents = await utils.getHomeScreenNews()
+                this.categories = await utils.getHomeScreenInfo()
+            } catch (err) {
+                this.$store.dispatch('logout');
+                this.$router.push('/login');
+            }
         },
         getPath (content) {
             const path = content.type === 'master' ? '/master/' : '/detail/';

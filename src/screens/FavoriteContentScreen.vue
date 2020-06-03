@@ -27,6 +27,10 @@
                                     <Icon icon="star" :size="20" @click="makeFavorite(content)"
                                     :style="{color : content.isFavorite ? '#F6B406' : '#9191a3'}"
                                     class="Icon"/>
+                                    <Icon v-if="content.type !== 'master'" icon="play" :size="20" 
+                                    @click="handleClickOnImage(content)"
+                                    :style="{color : '#9191a3'}"
+                                    class="Icon"/>
                                 </footer>
                             </div>
                         </template>
@@ -71,7 +75,6 @@ export default {
         async makeFavorite (content) {
             await utils.makeFavorite(content);
             this.contents = this.contents.filter((content) => content.isFavorite);
-            console.log(this.contents)
         }
     },
     mounted () {
@@ -94,7 +97,7 @@ export default {
             z-index: 1;
             .MoviesContainer {
                 display: grid;
-                grid-template-columns: 1fr 1fr 1fr 1fr;
+                grid-template-columns: 1fr 1fr 1fr;
                 margin: 0px 60px;
                 grid-row-gap: 30px;
                 grid-column-gap: 30px;
@@ -120,8 +123,6 @@ export default {
                         p {
                             color: $gray-04;
                             padding: 0px 5px 5px 5px;
-                            overflow: hidden;
-                            text-overflow: ellipsis;
                             text-align: left;
                             max-height: 70px;
                             line-height: 15px;
@@ -136,6 +137,7 @@ export default {
                             }
                             .Icon {
                                 cursor: pointer;
+                                padding: 10px;
                             }
                         }
                     }

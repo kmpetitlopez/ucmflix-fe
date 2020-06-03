@@ -104,8 +104,12 @@ export default {
             display: flex;
         }
         .Buttons{
-            padding: 7px 10px;
+            margin-left: 5px;
             cursor: pointer;
+            color : $gray-02;
+            border: 1px solid $gray-04;
+            border-radius: 4px;
+            padding: 6px 5px;
         }
     }
 }

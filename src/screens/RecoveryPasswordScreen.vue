@@ -63,8 +63,13 @@ export default {
             this.isLoading = true;
 
             if (isValid) {
-               await api.recoverPassword(this.data);
-               this.emailSent = true;
+                try {
+                    await api.recoverPassword(this.data);
+                    this.emailSent = true;
+                } catch(err) {
+                    this.isInvalid.email = true;
+                    this.error.email = 'Email inválido';
+                }               
             }
 
             this.isLoading = false;
